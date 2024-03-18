@@ -21,4 +21,8 @@ public class ProductMiniatureComponent extends BasePage {
         var value = productPrice.getText().replaceAll("\\$", "").trim();
         return Double.parseDouble(value);
     }
+
+    public String getName(){
+        return productName.getText();
+    }
 }

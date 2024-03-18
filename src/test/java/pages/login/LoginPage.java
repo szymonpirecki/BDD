@@ -15,7 +15,7 @@ public class LoginPage extends BasePage {
     private WebElement passwordInput;
 
     @FindBy(css = "#login-button")
-    private WebElement submitBtn;
+    private WebElement loginBtn;
 
     @FindBy(css = ".error-message-container")
     private WebElement errorMsgLbl;
@@ -31,7 +31,7 @@ public class LoginPage extends BasePage {
     }
 
     public void clickLogInButton() {
-        submitBtn.click();
+        loginBtn.click();
     }
 
     public String getErrorMsg() {

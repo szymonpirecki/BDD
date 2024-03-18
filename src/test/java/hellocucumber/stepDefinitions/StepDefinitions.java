@@ -19,6 +19,8 @@ import java.util.Comparator;
 
 public class StepDefinitions extends TestBase {
 
+    //hooks
+
     @Before
     public void setUpDriver() {
         if (driver == null) {
@@ -36,15 +38,36 @@ public class StepDefinitions extends TestBase {
         }
     }
 
+
+    //step definitions
+
     @Given("I am on the login page")
     public void i_am_on_the_login_page() {
         driver.get(url);
     }
 
     @Given("I enter credentials for locked out user")
-    public void i_entered_credentials_for_locked_out_user() {
+    public void i_enter_credentials_for_locked_out_user() {
         new LoginPage(driver)
                 .provideCredentials(login_locked_out_user, password);
+    }
+
+    @Given("I enter invalid credentials")
+    public void i_enter_invalid_credentials() {
+        new LoginPage(driver)
+                .provideCredentials(getRandomString(), getRandomString());
+    }
+
+    @Given("I enter only username")
+    public void i_enter_only_username() {
+        new LoginPage(driver)
+                .provideCredentials(login_standard_user, "");
+    }
+
+    @Given("I enter only password")
+    public void i_enter_only_password() {
+        new LoginPage(driver)
+                .provideCredentials("", password);
     }
 
     @Given("I am logged in as a standard user")
@@ -61,29 +84,41 @@ public class StepDefinitions extends TestBase {
                 .clickLogInButton();
     }
 
+    @When("^I select sorting option by (.+) in (.+) order$")
+    public void i_select_specific_sorting_option(String sortBy, String sortOrder) {
+        new ProductListPage(driver)
+                .sortProducts(SortBy.valueOf(sortBy), SortOrder.valueOf(sortOrder));
+    }
+
     @Then("I am still on the login page")
     public void i_am_still_on_the_login_page() {
         Assertions.assertThat(driver.getCurrentUrl())
                 .isEqualTo(url);
     }
 
-    @Then("Error message is displayed")
-    public void error_msg_is_displayed() {
+    @Then("Error message {string} is displayed")
+    public void error_msg_is_displayed(String errorMsg) {
         Assertions.assertThat(new LoginPage(driver).getErrorMsg())
-                .isEqualTo(warning_msg_locked_out_user);
+                .isEqualTo(errorMsg);
     }
 
-    @When("I select sorting option 'Price low to high'")
-    public void i_select_sorting_option_price_low_to_high() {
-        new ProductListPage(driver)
-                .sortProducts(SortBy.PRICE, SortOrder.ASC);
-    }
-
-    @Then("The products are displayed in ascending order by price")
-    public void theProductsAreDisplayedInAscendingOrderByPrice() {
+    @Then("^Products are displayed in (.+) order by (.+)$")
+    public void products_are_displayed_in_specific_order(String sortOrder, String sortBy) {
         var products = new ProductListPage(driver)
                 .getProducts();
         Assertions.assertThat(products)
-                .isSortedAccordingTo(Comparator.comparing(ProductMiniatureComponent::getPrice));
+                .isSortedAccordingTo(getProductComparator(SortBy.valueOf(sortBy), SortOrder.valueOf(sortOrder)));
     }
+
+    private Comparator<? super ProductMiniatureComponent> getProductComparator(SortBy sortBy, SortOrder sortOrder) {
+        Comparator<ProductMiniatureComponent> comparator;
+        if (sortBy == SortBy.NAME) {
+            comparator = Comparator.comparing(ProductMiniatureComponent::getName);
+        } else {
+            comparator = Comparator.comparing(ProductMiniatureComponent::getPrice);
+        }
+        return (sortOrder == SortOrder.DESC) ? comparator.reversed() : comparator;
+    }
+
+
 }
