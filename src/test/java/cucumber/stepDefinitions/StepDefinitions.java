@@ -1,6 +1,6 @@
-package hellocucumber.stepDefinitions;
+package cucumber.stepDefinitions;
 
-import hellocucumber.base.TestBase;
+import cucumber.base.TestBase;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;

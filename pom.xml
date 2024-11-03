@@ -11,12 +11,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.18.1</selenium.version>
-        <seleniumWebDriverManager.version>5.6.2</seleniumWebDriverManager.version>
+        <selenium.version>4.26.0</selenium.version>
+        <seleniumWebDriverManager.version>5.9.2</seleniumWebDriverManager.version>
         <assertJ.version>3.24.2</assertJ.version>
-        <logback.version>1.4.11</logback.version>
-        <cucumber.version>7.15.0</cucumber.version>
+        <logback.version>1.4.12</logback.version>
+        <cucumber.version>7.20.1</cucumber.version>
         <jUnit.version>5.10.1</jUnit.version>
+        <lombok.version>1.18.34</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -90,6 +91,12 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
